@@ -15,7 +15,7 @@ function randomBetween(min, max) {
 }
 
 function clearCanvas() {
-	context.fillStyle = "#ffffff";
+	context.fillStyle = "#000000";
 	context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -37,7 +37,7 @@ function Line(ang) {
 	this.y1 = canvas.height/2;
 	this.x2 = canvas.width/2;
 	this.y2 = canvas.height/2;
-	this.life = 250;
+	this.life = 400;
 	this.angle = ang;
 
 	this.update = function() {
@@ -56,7 +56,7 @@ function Line(ang) {
 		context.beginPath();
 		context.moveTo(this.x1, this.y1);
 		context.lineTo(this.x2, this.y2);
-		context.strokeStyle = "#000000";
+		context.strokeStyle = "#ffffff";
 		context.stroke();
 
 		return this;
