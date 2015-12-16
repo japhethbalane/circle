@@ -49,6 +49,8 @@ function Line(ang) {
 			this.y2-=dy;
 		};
 
+		this.x2++;
+
 		return this;
 	}
 
