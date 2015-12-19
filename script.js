@@ -4,7 +4,7 @@ var context = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-var line = [];
+var lines = [];
 
 clearCanvas();
 generateLine();
@@ -21,14 +21,14 @@ function clearCanvas() {
 
 function generateLine() {
 	for (var i = 0; i < 360; i++) {
-		line.push(new Line(i+1));
+		lines.push(new Line(i+1));
 	};
 }
 
 function drawLine() {
 	clearCanvas();
-	for (var i = 0; i < line.length; i++) {
-		line[i].update().draw();
+	for (var i = 0; i < lines.length; i++) {
+		lines[i].update().draw();
 	};
 }
 
@@ -74,6 +74,19 @@ function Line(ang) {
 		context.lineTo(this.x2, this.y2);
 		context.strokeStyle = "#000";
 		context.stroke();
+
+		for (var i = 0; i < lines.length; i++) {
+			if (lines[i] == this) {
+				if (lines[i+1] != null) {
+					context.beginPath();
+					context.moveTo(this.x2, this.y2);
+					context.lineTo(lines[i+1].x2, lines[i+1].y2);
+					context.strokeStyle = "#000";
+					context.stroke();
+				};
+				i = lines.length;
+			};
+		};
 
 		return this;
 	}
