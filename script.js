@@ -37,7 +37,7 @@ function Line(ang) {
 	this.y1 = canvas.height/2;
 	this.x2 = canvas.width/2;
 	this.y2 = canvas.height/2;
-	this.life = 200;
+	this.life = 300;
 	this.angle = ang;
 
 	this.update = function() {
