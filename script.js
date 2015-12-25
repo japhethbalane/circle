@@ -52,16 +52,16 @@ function Line(ang) {
 		if (this.life <= 0) {
 			var x = randomBetween(0,4);
 			if (x == 0) {
-				this.x2-=5;
+				this.x2-=0.5;
 			};
 			if (x == 1) {
-				this.x2+=5;
+				this.x2+=0.5;
 			};
 			if (x == 2) {
-				this.y2-=5;
+				this.y2-=0.5;
 			};
 			if (x == 3) {
-				this.y2+=5;
+				this.y2+=0.5;
 			};
 		};
 
