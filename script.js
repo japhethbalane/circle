@@ -30,6 +30,11 @@ function drawLine() {
 	for (var i = 0; i < lines.length; i++) {
 		lines[i].update().draw();
 	};
+	context.beginPath();
+	context.moveTo(lines[0].x2, lines[0].y2);
+	context.lineTo(lines[lines.length-1].x2, lines[lines.length-1].y2);
+	context.strokeStyle = "#000";
+	context.stroke();
 }
 
 function Line(ang) {
@@ -37,7 +42,7 @@ function Line(ang) {
 	this.y1 = canvas.height/2;
 	this.x2 = canvas.width/2;
 	this.y2 = canvas.height/2;
-	this.life = 300;
+	this.life = 200;
 	this.angle = ang;
 
 	this.update = function() {
@@ -52,16 +57,16 @@ function Line(ang) {
 		if (this.life <= 0) {
 			var x = randomBetween(0,4);
 			if (x == 0) {
-				this.x2-=0.5;
+				this.x2-=0.05;
 			};
 			if (x == 1) {
-				this.x2+=0.5;
+				this.x2+=0.05;
 			};
 			if (x == 2) {
-				this.y2-=0.5;
+				this.y2-=0.05;
 			};
 			if (x == 3) {
-				this.y2+=0.5;
+				this.y2+=0.05;
 			};
 		};
 
