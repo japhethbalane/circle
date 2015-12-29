@@ -46,8 +46,8 @@ function drawOutline(){
 	context.beginPath();
 	context.arc(canvas.width/2, canvas.height/2, 500 - lines[0].life, Math.PI * 2, false);
 	context.strokeStyle = "#000";
-	context.fillStyle = "rgba(100,100,100,0.3)";
-	context.stroke();
+	context.fillStyle = "rgba(100,100,100,0.2)";
+	// context.stroke();
 	context.fill();
 }
 
@@ -70,7 +70,7 @@ function Line(ang) {
 			this.y2-=dy;
 		};
 
-		if (this.life < 100) {
+		if (this.life <= 0) {
 			var x = randomBetween(0,4);
 			if (x == 0) {
 				this.x2-=0.1;
