@@ -8,14 +8,14 @@ var lines = [];
 
 clearCanvas();
 generateLine();
-setInterval(drawLine, 30);
+setInterval(drawWorld, 30);
 
 function randomBetween(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function clearCanvas() {
-	context.fillStyle = "#fff";
+	context.fillStyle = "#000";
 	context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -25,13 +25,13 @@ function generateLine() {
 	};
 }
 
-function drawLine() {
+function drawWorld() {
 	clearCanvas();
+	drawOutline();
 	for (var i = 0; i < lines.length; i++) {
 		lines[i].update().draw();
 	};
 	connectCircle();
-	drawOutline();
 }
 
 function connectCircle(){
@@ -44,11 +44,11 @@ function connectCircle(){
 
 function drawOutline(){
 	context.beginPath();
-	context.arc(canvas.width/2, canvas.height/2, 500 - lines[0].life, Math.PI * 2, false);
-	context.strokeStyle = "#000";
-	context.fillStyle = "rgba(100,100,100,0.2)";
-	// context.stroke();
+	context.arc(canvas.width/2, canvas.height/2, 310 - lines[0].life, Math.PI * 2, false);
+	context.strokeStyle = "#fff";
+	context.fillStyle = "rgba(200,200,200,0.1)";
 	context.fill();
+	context.stroke();
 }
 
 function Line(ang) {
@@ -56,7 +56,7 @@ function Line(ang) {
 	this.y1 = canvas.height/2;
 	this.x2 = canvas.width/2;
 	this.y2 = canvas.height/2;
-	this.life = 350;
+	this.life = 300;
 	this.angle = ang;
 
 	this.update = function() {
@@ -93,7 +93,7 @@ function Line(ang) {
 		context.beginPath();
 		context.moveTo(this.x1, this.y1);
 		context.lineTo(this.x2, this.y2);
-		context.strokeStyle = "#000";
+		context.strokeStyle = "#fff";
 		context.stroke();
 
 		for (var i = 0; i < lines.length; i++) {
@@ -102,7 +102,7 @@ function Line(ang) {
 					context.beginPath();
 					context.moveTo(this.x2, this.y2);
 					context.lineTo(lines[i+1].x2, lines[i+1].y2);
-					context.strokeStyle = "#000";
+					context.strokeStyle = "#fff";
 					context.stroke();
 				};
 				i = lines.length;
