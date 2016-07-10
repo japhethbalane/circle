@@ -4,113 +4,119 @@ var context = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-var lines = [];
+var pores = [];
+var poreCount = 1000;
 
-clearCanvas();
-generateLine();
-setInterval(drawWorld, 30);
 
-function randomBetween(min, max) {
-	return Math.floor(Math.random() * (max - min)) + min;
+////////////////////////////////////////////////////////////////////////////////
+
+setInterval(world,30);
+generatePores();
+
+////////////////////////////////////////////////////////////////////////////////
+
+function generatePores() {
+	for (var i = 0; i < poreCount; i++) {
+		pores.push(new Pore());
+	}
+}
+
+function randomColor() {
+	return "rgb("+randomBetween(50,255)+","+randomBetween(50,255)+","+randomBetween(50,255)+")";
 }
 
 function clearCanvas() {
 	context.fillStyle = "#000";
-	context.fillRect(0, 0, canvas.width, canvas.height);
+	context.fillRect(0,0,canvas.width,canvas.height);
 }
 
-function generateLine() {
-	for (var i = 0; i < 360; i++) {
-		lines.push(new Line(i+1));
-	};
+function randomBetween(min,max) {
+	return Math.floor(Math.random()*(max-min))+min;
 }
 
-function drawWorld() {
+////////////////////////////////////////////////////////////////////////////////
+
+function world() {
 	clearCanvas();
-	drawOutline();
-	for (var i = 0; i < lines.length; i++) {
-		lines[i].update().draw();
-	};
-	connectCircle();
+	for (var i = 0; i < pores.length; i++) {
+		pores[i].update().draw();
+	}
 }
 
-function connectCircle(){
-	context.beginPath();
-	context.moveTo(lines[0].x2, lines[0].y2);
-	context.lineTo(lines[lines.length-1].x2, lines[lines.length-1].y2);
-	context.strokeStyle = "#000";
-	context.stroke();
-}
+////////////////////////////////////////////////////////////////////////////////
 
-function drawOutline(){
-	context.beginPath();
-	context.arc(canvas.width/2, canvas.height/2, 310 - lines[0].life, Math.PI * 2, false);
-	context.strokeStyle = "#fff";
-	context.fillStyle = "rgba(200,200,200,0.1)";
-	context.fill();
-	context.stroke();
-}
+function Pore() {
+	this.x = randomBetween(0,canvas.width);
+	this.y = randomBetween(0,canvas.height);
+	this.radius = randomBetween(1,5);
+	this.speed = this.radius/5;
+	this.minangle = 270 - randomBetween(20,90);
+	this.maxangle = 270 + randomBetween(20,90);
+	this.angle = randomBetween(this.minangle,this.maxangle);
+	this.isRightSwing = true;
+	if (randomBetween(0,2) == 0) {this.isRightSwing = false}
+	var opacity = randomBetween(1,5);
+	var maxOpacity = opacity;
+	var color = "rgba(0,255,255,"+opacity+")";
+	var opacityBoolean = true;
 
-function Line(ang) {
-	this.x1 = canvas.width/2;
-	this.y1 = canvas.height/2;
-	this.x2 = canvas.width/2;
-	this.y2 = canvas.height/2;
-	this.life = 300;
-	this.angle = ang;
+	this.control = function(){
+		if (this.y-this.radius > canvas.height) {this.y = 0-this.radius;}
+		else if (this.y+this.radius < 0) {this.y = canvas.height+this.radius;}
+		if (this.x-this.radius > canvas.width) {this.x = 0-this.radius;}
+		else if (this.x+this.radius < 0) {this.y = canvas.width+this.radius;}
+		color = "rgba(0,255,255,"+opacity+")";
+	}
+
+	this.updateOpacity = function() {
+		if (opacityBoolean && opacity > 0) {opacity-=0.1;}
+		else if (!opacityBoolean && opacityBoolean < maxOpacity) {opacity+=0.1;}
+		if (opacity < 0 || opacity > maxOpacity) {opacityBoolean=!opacityBoolean;}
+	}
+
+	this.move = function() {
+		if (this.isRightSwing) {
+			this.angle--;
+			if (this.angle <= this.minangle) {this.isRightSwing = false;}
+		}
+		else if (!this.isRightSwing) {
+			this.angle++;
+			if (this.angle >= this.maxangle) {this.isRightSwing = true;}
+		}
+
+		var dx = Math.cos(this.angle * Math.PI / 180) * this.speed;
+        var dy = Math.sin(this.angle * Math.PI / 180) * this.speed;
+
+        this.x += dx;
+        this.y += dy;
+	}
 
 	this.update = function() {
-		var dx = Math.cos(this.angle * Math.PI / 180);
-		var dy = Math.sin(this.angle * Math.PI / 180);
-		if (this.life > 0) {
-			this.life--;
-		};
-		if (this.life > 0) {
-			this.x2+=dx;
-			this.y2-=dy;
-		};
-
-		if (this.life <= 0) {
-			var x = randomBetween(0,4);
-			if (x == 0) {
-				this.x2-=0.5;
-			};
-			if (x == 1) {
-				this.x2+=0.5;
-			};
-			if (x == 2) {
-				this.y2-=0.5;
-			};
-			if (x == 3) {
-				this.y2+=0.5;
-			};
-		};
+		this.updateOpacity();
+		this.control();
+		this.move();
 
 		return this;
 	}
 
 	this.draw = function() {
+		context.fillStyle = color;
+		context.strokeStyle = "black";
+		context.shadowBlur = 10;
+		context.shadowColor = color;
+
 		context.beginPath();
-		context.moveTo(this.x1, this.y1);
-		context.lineTo(this.x2, this.y2);
-		context.strokeStyle = "#fff";
+		context.arc(this.x,this.y,this.radius,Math.PI*2,false);
+		context.fill();
 		context.stroke();
 
-		for (var i = 0; i < lines.length; i++) {
-			if (lines[i] == this) {
-				if (lines[i+1] != null) {
-					context.beginPath();
-					context.moveTo(this.x2, this.y2);
-					context.lineTo(lines[i+1].x2, lines[i+1].y2);
-					context.strokeStyle = "#fff";
-					context.stroke();
-				};
-				i = lines.length;
-			};
-		};
-
-		return this;
+		// context.beginPath();
+		// context.moveTo(this.x-this.radius - 1,this.y+this.radius + 1);
+		// context.lineTo(this.x+this.radius + 1,this.y+this.radius + 1);
+		// context.lineTo(this.x+this.radius + 2,this.y-this.radius*2 - 1);
+		// context.lineTo(this.x,this.y-this.radius*3);
+		// context.lineTo(this.x-this.radius - 2,this.y-this.radius*2 - 1);
+		// context.lineTo(this.x-this.radius - 1,this.y+this.radius + 1);
+		// context.stroke();
 	}
-
 }
-
