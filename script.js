@@ -55,9 +55,9 @@ function Pore() {
 	this.angle = randomBetween(this.minangle,this.maxangle);
 	this.isRightSwing = true;
 	if (randomBetween(0,2) == 0) {this.isRightSwing = false}
-	var opacity = randomBetween(1,5);
+	var opacity = randomBetween(1,10);
 	var maxOpacity = opacity;
-	var color = "rgba(0,255,255,"+opacity+")";
+	var color;
 	var opacityBoolean = true;
 
 	this.control = function(){
@@ -65,13 +65,13 @@ function Pore() {
 		else if (this.y+this.radius < 0) {this.y = canvas.height+this.radius;}
 		if (this.x-this.radius > canvas.width) {this.x = 0-this.radius;}
 		else if (this.x+this.radius < 0) {this.y = canvas.width+this.radius;}
-		color = "rgba(0,255,255,"+opacity+")";
+		color = "rgba(255,255,0,"+opacity+")";
 	}
 
 	this.updateOpacity = function() {
-		if (opacityBoolean && opacity > 0) {opacity-=0.1;}
+		if (opacityBoolean && opacity > 0.5) {opacity-=0.1;}
 		else if (!opacityBoolean && opacityBoolean < maxOpacity) {opacity+=0.1;}
-		if (opacity < 0 || opacity > maxOpacity) {opacityBoolean=!opacityBoolean;}
+		if (opacity < 0.5 || opacity > maxOpacity) {opacityBoolean=!opacityBoolean;}
 	}
 
 	this.move = function() {
