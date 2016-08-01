@@ -84,8 +84,8 @@ function Pore() {
 			if (this.angle >= this.maxangle) {this.isRightSwing = true;}
 		}
 
-		var dx = Math.cos(this.angle * Math.PI / 180) * this.speed;
-        var dy = Math.sin(this.angle * Math.PI / 180) * this.speed;
+		var dx = Math.cos(this.angle * (Math.PI / 180)) * this.speed;
+        var dy = Math.sin(this.angle * (Math.PI / 180)) * this.speed;
 
         this.x += dx;
         this.y += dy;
