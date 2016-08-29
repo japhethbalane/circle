@@ -64,7 +64,7 @@ function Pore() {
 		if (this.y-this.radius > canvas.height) {this.y = 0-this.radius;}
 		else if (this.y+this.radius < 0) {this.y = canvas.height+this.radius;}
 		if (this.x-this.radius > canvas.width) {this.x = 0-this.radius;}
-		else if (this.x+this.radius < 0) {this.y = canvas.width+this.radius;}
+		else if (this.x+this.radius < 0) {this.x = canvas.width+this.radius;}
 		color = "rgba(255,255,0,"+opacity+")";
 	}
 
