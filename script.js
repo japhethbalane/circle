@@ -36,7 +36,7 @@ function world() {
         for (var pore2 of pores) {
             var hyp = getHypothenuse(pore1, pore2);
             if (pore1 != pore2 && hyp < 70) {
-                context.strokeStyle = 'rgba(255,200,0,'+((70-hyp)/500)+')';
+                context.strokeStyle = 'rgba(255,200,0,'+((70-hyp)/200)+')';
                 context.beginPath();
                 context.moveTo(pore1.x,pore1.y);
                 context.lineTo(pore2.x,pore2.y);
@@ -77,7 +77,7 @@ function Pore() {
         } else if (this.x < 0 - 100) {
             this.x = canvas.width + 100;
         }
-        color = 'rgba(255,255,0,'+opacity+')';
+        color = 'rgba(255,255,255,'+opacity+')';
     }
 
     this.updateOpacity = function() {
@@ -113,14 +113,15 @@ function Pore() {
 
     this.draw = function() {
         context.fillStyle = color;
-        context.strokeStyle = 'black';
         context.lineWidth = this.radius;
+        context.shadowBlur = 15;
+        context.shadowColor = 'gold';
 
         context.beginPath();
         context.arc(this.x,this.y,this.radius,Math.PI*2,false);
         context.fill();
-        context.stroke();
 
         context.lineWidth = 1;
+        context.shadowBlur = 0;
     }
 }
