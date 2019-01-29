@@ -5,15 +5,19 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var pores = [];
-var poreCount = canvas.width * 0.5;
+var poreCount = canvas.width * 0.3;
 
 for (var i = 0; i < poreCount; i++) {
     pores.push(new Pore());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+var gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+gradient.addColorStop(0, "#000428");
+gradient.addColorStop(1, "#004e92");
 function clearCanvas() {
-    context.fillStyle = 'rgba(0,0,0,1)';
+    // context.fillStyle = 'rgba(50,50,50,1)';
+    context.fillStyle = gradient;
     context.fillRect(0,0,canvas.width,canvas.height);
 }
 
@@ -27,12 +31,9 @@ function getHypothenuse(p1, p2) {
     return Math.sqrt((x * x) + (y * y));
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
-setInterval(world,30);
-function world() {
-    clearCanvas();
+function drawLines() {
     for (var pore1 of pores) {
+        var arr = [];
         for (var pore2 of pores) {
             var hyp = getHypothenuse(pore1, pore2);
             if (pore1 != pore2 && hyp < 70) {
@@ -44,6 +45,14 @@ function world() {
             }
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+setInterval(world,30);
+function world() {
+    clearCanvas();
+    drawLines();
     for (var i = 0; i < pores.length; i++) {
         pores[i].update().draw();
     }
@@ -56,8 +65,8 @@ function Pore() {
     this.y = randomBetween(-100,canvas.height+100);
     this.radius = randomBetween(10,50)*0.1;
     this.speed = this.radius/3;
-    this.minangle = 270 - randomBetween(20,90);
-    this.maxangle = 270 + randomBetween(20,90);
+    this.minangle = 270 - randomBetween(20,180);
+    this.maxangle = 270 + randomBetween(20,180);
     this.angle = randomBetween(this.minangle,this.maxangle);
     this.isRightSwing = true;
     if (randomBetween(0,2) == 0) {this.isRightSwing = false}
